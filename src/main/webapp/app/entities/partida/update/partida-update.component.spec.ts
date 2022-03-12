@@ -8,6 +8,8 @@ import { of, Subject, from } from 'rxjs';
 
 import { PartidaService } from '../service/partida.service';
 import { IPartida, Partida } from '../partida.model';
+import { IJuego } from 'app/entities/juego/juego.model';
+import { JuegoService } from 'app/entities/juego/service/juego.service';
 
 import { PartidaUpdateComponent } from './partida-update.component';
 
@@ -16,6 +18,7 @@ describe('Partida Management Update Component', () => {
   let fixture: ComponentFixture<PartidaUpdateComponent>;
   let activatedRoute: ActivatedRoute;
   let partidaService: PartidaService;
+  let juegoService: JuegoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -37,18 +40,41 @@ describe('Partida Management Update Component', () => {
     fixture = TestBed.createComponent(PartidaUpdateComponent);
     activatedRoute = TestBed.inject(ActivatedRoute);
     partidaService = TestBed.inject(PartidaService);
+    juegoService = TestBed.inject(JuegoService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
+    it('Should call Juego query and add missing value', () => {
+      const partida: IPartida = { id: 456 };
+      const juego: IJuego = { id: 28385 };
+      partida.juego = juego;
+
+      const juegoCollection: IJuego[] = [{ id: 18654 }];
+      jest.spyOn(juegoService, 'query').mockReturnValue(of(new HttpResponse({ body: juegoCollection })));
+      const additionalJuegos = [juego];
+      const expectedCollection: IJuego[] = [...additionalJuegos, ...juegoCollection];
+      jest.spyOn(juegoService, 'addJuegoToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ partida });
+      comp.ngOnInit();
+
+      expect(juegoService.query).toHaveBeenCalled();
+      expect(juegoService.addJuegoToCollectionIfMissing).toHaveBeenCalledWith(juegoCollection, ...additionalJuegos);
+      expect(comp.juegosSharedCollection).toEqual(expectedCollection);
+    });
+
     it('Should update editForm', () => {
       const partida: IPartida = { id: 456 };
+      const juego: IJuego = { id: 68512 };
+      partida.juego = juego;
 
       activatedRoute.data = of({ partida });
       comp.ngOnInit();
 
       expect(comp.editForm.value).toEqual(expect.objectContaining(partida));
+      expect(comp.juegosSharedCollection).toContain(juego);
     });
   });
 
@@ -113,6 +139,16 @@ describe('Partida Management Update Component', () => {
       expect(partidaService.update).toHaveBeenCalledWith(partida);
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Tracking relationships identifiers', () => {
+    describe('trackJuegoById', () => {
+      it('Should return tracked Juego primary key', () => {
+        const entity = { id: 123 };
+        const trackResult = comp.trackJuegoById(0, entity);
+        expect(trackResult).toEqual(entity.id);
+      });
     });
   });
 });

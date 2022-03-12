@@ -3,10 +3,12 @@ import { HttpResponse } from '@angular/common/http';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import { IPartida, Partida } from '../partida.model';
 import { PartidaService } from '../service/partida.service';
+import { IJuego } from 'app/entities/juego/juego.model';
+import { JuegoService } from 'app/entities/juego/service/juego.service';
 
 @Component({
   selector: 'jhi-partida-update',
@@ -15,18 +17,28 @@ import { PartidaService } from '../service/partida.service';
 export class PartidaUpdateComponent implements OnInit {
   isSaving = false;
 
+  juegosSharedCollection: IJuego[] = [];
+
   editForm = this.fb.group({
     id: [],
     ganador: [null, [Validators.required]],
     perdedor: [null, [Validators.required]],
     puntosDelGanador: [null, [Validators.required, Validators.min(0)]],
+    juego: [],
   });
 
-  constructor(protected partidaService: PartidaService, protected activatedRoute: ActivatedRoute, protected fb: FormBuilder) {}
+  constructor(
+    protected partidaService: PartidaService,
+    protected juegoService: JuegoService,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ partida }) => {
       this.updateForm(partida);
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -42,6 +54,10 @@ export class PartidaUpdateComponent implements OnInit {
     } else {
       this.subscribeToSaveResponse(this.partidaService.create(partida));
     }
+  }
+
+  trackJuegoById(index: number, item: IJuego): number {
+    return item.id!;
   }
 
   protected subscribeToSaveResponse(result: Observable<HttpResponse<IPartida>>): void {
@@ -69,7 +85,18 @@ export class PartidaUpdateComponent implements OnInit {
       ganador: partida.ganador,
       perdedor: partida.perdedor,
       puntosDelGanador: partida.puntosDelGanador,
+      juego: partida.juego,
     });
+
+    this.juegosSharedCollection = this.juegoService.addJuegoToCollectionIfMissing(this.juegosSharedCollection, partida.juego);
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.juegoService
+      .query()
+      .pipe(map((res: HttpResponse<IJuego[]>) => res.body ?? []))
+      .pipe(map((juegos: IJuego[]) => this.juegoService.addJuegoToCollectionIfMissing(juegos, this.editForm.get('juego')!.value)))
+      .subscribe((juegos: IJuego[]) => (this.juegosSharedCollection = juegos));
   }
 
   protected createFromForm(): IPartida {
@@ -79,6 +106,7 @@ export class PartidaUpdateComponent implements OnInit {
       ganador: this.editForm.get(['ganador'])!.value,
       perdedor: this.editForm.get(['perdedor'])!.value,
       puntosDelGanador: this.editForm.get(['puntosDelGanador'])!.value,
+      juego: this.editForm.get(['juego'])!.value,
     };
   }
 }

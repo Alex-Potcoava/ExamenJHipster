@@ -1,7 +1,10 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import org.hibernate.annotations.Cache;
@@ -38,6 +41,26 @@ public class Jugador implements Serializable {
     @NotNull
     @Column(name = "fecha_de_nacimiento", nullable = false)
     private LocalDate fechaDeNacimiento;
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_jugador__juego",
+        joinColumns = @JoinColumn(name = "jugador_id"),
+        inverseJoinColumns = @JoinColumn(name = "juego_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "jugadors", "partidas" }, allowSetters = true)
+    private Set<Juego> juegos = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(
+        name = "rel_jugador__partida",
+        joinColumns = @JoinColumn(name = "jugador_id"),
+        inverseJoinColumns = @JoinColumn(name = "partida_id")
+    )
+    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+    @JsonIgnoreProperties(value = { "juego", "jugadors" }, allowSetters = true)
+    private Set<Partida> partidas = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -104,6 +127,56 @@ public class Jugador implements Serializable {
 
     public void setFechaDeNacimiento(LocalDate fechaDeNacimiento) {
         this.fechaDeNacimiento = fechaDeNacimiento;
+    }
+
+    public Set<Juego> getJuegos() {
+        return this.juegos;
+    }
+
+    public void setJuegos(Set<Juego> juegos) {
+        this.juegos = juegos;
+    }
+
+    public Jugador juegos(Set<Juego> juegos) {
+        this.setJuegos(juegos);
+        return this;
+    }
+
+    public Jugador addJuego(Juego juego) {
+        this.juegos.add(juego);
+        juego.getJugadors().add(this);
+        return this;
+    }
+
+    public Jugador removeJuego(Juego juego) {
+        this.juegos.remove(juego);
+        juego.getJugadors().remove(this);
+        return this;
+    }
+
+    public Set<Partida> getPartidas() {
+        return this.partidas;
+    }
+
+    public void setPartidas(Set<Partida> partidas) {
+        this.partidas = partidas;
+    }
+
+    public Jugador partidas(Set<Partida> partidas) {
+        this.setPartidas(partidas);
+        return this;
+    }
+
+    public Jugador addPartida(Partida partida) {
+        this.partidas.add(partida);
+        partida.getJugadors().add(this);
+        return this;
+    }
+
+    public Jugador removePartida(Partida partida) {
+        this.partidas.remove(partida);
+        partida.getJugadors().remove(this);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

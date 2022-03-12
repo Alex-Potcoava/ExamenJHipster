@@ -36,6 +36,7 @@
           <th scope="col" jhiSortBy="ganador"><span>Ganador</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="perdedor"><span>Perdedor</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col" jhiSortBy="puntosDelGanador"><span>Puntos Del Ganador</span> <fa-icon icon="sort"></fa-icon></th>
+          <th scope="col" jhiSortBy="juego.nombre"><span>Juego</span> <fa-icon icon="sort"></fa-icon></th>
           <th scope="col"></th>
         </tr>
       </thead>
@@ -47,6 +48,11 @@
           <td>{{ partida.ganador }}</td>
           <td>{{ partida.perdedor }}</td>
           <td>{{ partida.puntosDelGanador }}</td>
+          <td>
+            <div *ngIf="partida.juego">
+              <a [routerLink]="['/juego', partida.juego?.id, 'view']">{{ partida.juego?.nombre }}</a>
+            </div>
+          </td>
           <td class="text-end">
             <div class="btn-group">
               <button

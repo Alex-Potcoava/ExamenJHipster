@@ -34,6 +34,14 @@ public interface JugadorService {
     Page<Jugador> findAll(Pageable pageable);
 
     /**
+     * Get all the jugadors with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<Jugador> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" jugador.
      *
      * @param id the id of the entity.

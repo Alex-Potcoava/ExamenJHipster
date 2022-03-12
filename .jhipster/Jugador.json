@@ -28,6 +28,23 @@
   "name": "Jugador",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "nombre",
+      "otherEntityName": "juego",
+      "otherEntityRelationshipName": "jugador",
+      "ownerSide": true,
+      "relationshipName": "juego",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "ganador",
+      "otherEntityName": "partida",
+      "otherEntityRelationshipName": "jugador",
+      "ownerSide": true,
+      "relationshipName": "partida",
+      "relationshipType": "many-to-many"
+    }
+  ],
   "service": "serviceImpl"
 }

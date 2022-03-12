@@ -88,6 +88,18 @@ public class JuegoQueryService extends QueryService<Juego> {
             if (criteria.getNombre() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getNombre(), Juego_.nombre));
             }
+            if (criteria.getJugadorId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getJugadorId(), root -> root.join(Juego_.jugadors, JoinType.LEFT).get(Jugador_.id))
+                    );
+            }
+            if (criteria.getPartidaId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getPartidaId(), root -> root.join(Juego_.partidas, JoinType.LEFT).get(Partida_.id))
+                    );
+            }
         }
         return specification;
     }

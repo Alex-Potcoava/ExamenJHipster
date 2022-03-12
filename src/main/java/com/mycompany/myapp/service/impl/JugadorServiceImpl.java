@@ -64,11 +64,15 @@ public class JugadorServiceImpl implements JugadorService {
         return jugadorRepository.findAll(pageable);
     }
 
+    public Page<Jugador> findAllWithEagerRelationships(Pageable pageable) {
+        return jugadorRepository.findAllWithEagerRelationships(pageable);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Jugador> findOne(Long id) {
         log.debug("Request to get Jugador : {}", id);
-        return jugadorRepository.findById(id);
+        return jugadorRepository.findOneWithEagerRelationships(id);
     }
 
     @Override

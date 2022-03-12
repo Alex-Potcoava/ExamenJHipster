@@ -54,6 +54,19 @@
             </small>
           </div>
         </div>
+
+        <div class="row mb-3">
+          <label class="form-label" for="field_juego">Juego</label>
+          <select class="form-control" id="field_juego" data-cy="juego" name="juego" formControlName="juego">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="juegoOption.id === editForm.get('juego')!.value?.id ? editForm.get('juego')!.value : juegoOption"
+              *ngFor="let juegoOption of juegosSharedCollection; trackBy: trackJuegoById"
+            >
+              {{ juegoOption.nombre }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

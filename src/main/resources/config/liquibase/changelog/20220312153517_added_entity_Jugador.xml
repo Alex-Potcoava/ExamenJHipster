@@ -30,6 +30,31 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="20220312153517-1-relations" author="jhipster">
+
+        <createTable tableName="rel_jugador__juego">
+            <column name="juego_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jugador_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="jugador_id, juego_id" tableName="rel_jugador__juego"/>
+
+        <createTable tableName="rel_jugador__partida">
+            <column name="partida_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="jugador_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="jugador_id, partida_id" tableName="rel_jugador__partida"/>
+    </changeSet>
+
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
     <!--

@@ -66,6 +66,30 @@
             </small>
           </div>
         </div>
+
+        <div class="row mb-3">
+          <label for="field_juegos">Juego</label>
+          <select class="form-control" id="field_juegos" data-cy="juego" multiple name="juegos" formControlName="juegos">
+            <option
+              [ngValue]="getSelectedJuego(juegoOption, editForm.get('juegos')!.value)"
+              *ngFor="let juegoOption of juegosSharedCollection; trackBy: trackJuegoById"
+            >
+              {{ juegoOption.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="row mb-3">
+          <label for="field_partidas">Partida</label>
+          <select class="form-control" id="field_partidas" data-cy="partida" multiple name="partidas" formControlName="partidas">
+            <option
+              [ngValue]="getSelectedPartida(partidaOption, editForm.get('partidas')!.value)"
+              *ngFor="let partidaOption of partidasSharedCollection; trackBy: trackPartidaById"
+            >
+              {{ partidaOption.ganador }}
+            </option>
+          </select>
+        </div>
       </div>
 
       <div>

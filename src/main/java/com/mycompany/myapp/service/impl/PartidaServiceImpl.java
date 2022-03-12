@@ -61,11 +61,15 @@ public class PartidaServiceImpl implements PartidaService {
         return partidaRepository.findAll(pageable);
     }
 
+    public Page<Partida> findAllWithEagerRelationships(Pageable pageable) {
+        return partidaRepository.findAllWithEagerRelationships(pageable);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Optional<Partida> findOne(Long id) {
         log.debug("Request to get Partida : {}", id);
-        return partidaRepository.findById(id);
+        return partidaRepository.findOneWithEagerRelationships(id);
     }
 
     @Override

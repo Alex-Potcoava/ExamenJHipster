@@ -34,6 +34,14 @@ public interface PartidaService {
     Page<Partida> findAll(Pageable pageable);
 
     /**
+     * Get all the partidas with eager load of many-to-many relationships.
+     *
+     * @param pageable the pagination information.
+     * @return the list of entities.
+     */
+    Page<Partida> findAllWithEagerRelationships(Pageable pageable);
+
+    /**
      * Get the "id" partida.
      *
      * @param id the id of the entity.

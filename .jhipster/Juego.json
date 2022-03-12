@@ -12,6 +12,20 @@
   "name": "Juego",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityName": "jugador",
+      "otherEntityRelationshipName": "juego",
+      "ownerSide": false,
+      "relationshipName": "jugador",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityName": "partida",
+      "otherEntityRelationshipName": "juego",
+      "relationshipName": "partida",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "service": "serviceImpl"
 }

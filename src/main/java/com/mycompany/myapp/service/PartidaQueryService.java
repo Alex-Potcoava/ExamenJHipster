@@ -94,6 +94,18 @@ public class PartidaQueryService extends QueryService<Partida> {
             if (criteria.getPuntosDelGanador() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPuntosDelGanador(), Partida_.puntosDelGanador));
             }
+            if (criteria.getJuegoId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getJuegoId(), root -> root.join(Partida_.juego, JoinType.LEFT).get(Juego_.id))
+                    );
+            }
+            if (criteria.getJugadorId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getJugadorId(), root -> root.join(Partida_.jugadors, JoinType.LEFT).get(Jugador_.id))
+                    );
+            }
         }
         return specification;
     }

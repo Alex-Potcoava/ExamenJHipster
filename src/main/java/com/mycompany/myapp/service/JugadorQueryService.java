@@ -97,6 +97,18 @@ public class JugadorQueryService extends QueryService<Jugador> {
             if (criteria.getFechaDeNacimiento() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getFechaDeNacimiento(), Jugador_.fechaDeNacimiento));
             }
+            if (criteria.getJuegoId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getJuegoId(), root -> root.join(Jugador_.juegos, JoinType.LEFT).get(Juego_.id))
+                    );
+            }
+            if (criteria.getPartidaId() != null) {
+                specification =
+                    specification.and(
+                        buildSpecification(criteria.getPartidaId(), root -> root.join(Jugador_.partidas, JoinType.LEFT).get(Partida_.id))
+                    );
+            }
         }
         return specification;
     }

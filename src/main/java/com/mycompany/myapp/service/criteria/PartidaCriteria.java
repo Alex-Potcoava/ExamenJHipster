@@ -34,6 +34,10 @@ public class PartidaCriteria implements Serializable, Criteria {
 
     private IntegerFilter puntosDelGanador;
 
+    private LongFilter juegoId;
+
+    private LongFilter jugadorId;
+
     private Boolean distinct;
 
     public PartidaCriteria() {}
@@ -43,6 +47,8 @@ public class PartidaCriteria implements Serializable, Criteria {
         this.ganador = other.ganador == null ? null : other.ganador.copy();
         this.perdedor = other.perdedor == null ? null : other.perdedor.copy();
         this.puntosDelGanador = other.puntosDelGanador == null ? null : other.puntosDelGanador.copy();
+        this.juegoId = other.juegoId == null ? null : other.juegoId.copy();
+        this.jugadorId = other.jugadorId == null ? null : other.jugadorId.copy();
         this.distinct = other.distinct;
     }
 
@@ -111,6 +117,36 @@ public class PartidaCriteria implements Serializable, Criteria {
         this.puntosDelGanador = puntosDelGanador;
     }
 
+    public LongFilter getJuegoId() {
+        return juegoId;
+    }
+
+    public LongFilter juegoId() {
+        if (juegoId == null) {
+            juegoId = new LongFilter();
+        }
+        return juegoId;
+    }
+
+    public void setJuegoId(LongFilter juegoId) {
+        this.juegoId = juegoId;
+    }
+
+    public LongFilter getJugadorId() {
+        return jugadorId;
+    }
+
+    public LongFilter jugadorId() {
+        if (jugadorId == null) {
+            jugadorId = new LongFilter();
+        }
+        return jugadorId;
+    }
+
+    public void setJugadorId(LongFilter jugadorId) {
+        this.jugadorId = jugadorId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -133,13 +169,15 @@ public class PartidaCriteria implements Serializable, Criteria {
             Objects.equals(ganador, that.ganador) &&
             Objects.equals(perdedor, that.perdedor) &&
             Objects.equals(puntosDelGanador, that.puntosDelGanador) &&
+            Objects.equals(juegoId, that.juegoId) &&
+            Objects.equals(jugadorId, that.jugadorId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, ganador, perdedor, puntosDelGanador, distinct);
+        return Objects.hash(id, ganador, perdedor, puntosDelGanador, juegoId, jugadorId, distinct);
     }
 
     // prettier-ignore
@@ -150,6 +188,8 @@ public class PartidaCriteria implements Serializable, Criteria {
             (ganador != null ? "ganador=" + ganador + ", " : "") +
             (perdedor != null ? "perdedor=" + perdedor + ", " : "") +
             (puntosDelGanador != null ? "puntosDelGanador=" + puntosDelGanador + ", " : "") +
+            (juegoId != null ? "juegoId=" + juegoId + ", " : "") +
+            (jugadorId != null ? "jugadorId=" + jugadorId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

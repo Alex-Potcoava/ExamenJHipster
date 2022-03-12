@@ -23,6 +23,20 @@
   "name": "Partida",
   "pagination": "pagination",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "nombre",
+      "otherEntityName": "juego",
+      "relationshipName": "juego",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "jugador",
+      "otherEntityRelationshipName": "partida",
+      "ownerSide": false,
+      "relationshipName": "jugador",
+      "relationshipType": "many-to-many"
+    }
+  ],
   "service": "serviceImpl"
 }

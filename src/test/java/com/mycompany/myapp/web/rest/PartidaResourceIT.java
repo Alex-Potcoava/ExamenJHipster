@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.mycompany.myapp.IntegrationTest;
+import com.mycompany.myapp.domain.Juego;
+import com.mycompany.myapp.domain.Jugador;
 import com.mycompany.myapp.domain.Partida;
 import com.mycompany.myapp.repository.PartidaRepository;
 import com.mycompany.myapp.service.criteria.PartidaCriteria;
@@ -481,6 +483,58 @@ class PartidaResourceIT {
 
         // Get all the partidaList where puntosDelGanador is greater than SMALLER_PUNTOS_DEL_GANADOR
         defaultPartidaShouldBeFound("puntosDelGanador.greaterThan=" + SMALLER_PUNTOS_DEL_GANADOR);
+    }
+
+    @Test
+    @Transactional
+    void getAllPartidasByJuegoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        partidaRepository.saveAndFlush(partida);
+        Juego juego;
+        if (TestUtil.findAll(em, Juego.class).isEmpty()) {
+            juego = JuegoResourceIT.createEntity(em);
+            em.persist(juego);
+            em.flush();
+        } else {
+            juego = TestUtil.findAll(em, Juego.class).get(0);
+        }
+        em.persist(juego);
+        em.flush();
+        partida.setJuego(juego);
+        partidaRepository.saveAndFlush(partida);
+        Long juegoId = juego.getId();
+
+        // Get all the partidaList where juego equals to juegoId
+        defaultPartidaShouldBeFound("juegoId.equals=" + juegoId);
+
+        // Get all the partidaList where juego equals to (juegoId + 1)
+        defaultPartidaShouldNotBeFound("juegoId.equals=" + (juegoId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllPartidasByJugadorIsEqualToSomething() throws Exception {
+        // Initialize the database
+        partidaRepository.saveAndFlush(partida);
+        Jugador jugador;
+        if (TestUtil.findAll(em, Jugador.class).isEmpty()) {
+            jugador = JugadorResourceIT.createEntity(em);
+            em.persist(jugador);
+            em.flush();
+        } else {
+            jugador = TestUtil.findAll(em, Jugador.class).get(0);
+        }
+        em.persist(jugador);
+        em.flush();
+        partida.addJugador(jugador);
+        partidaRepository.saveAndFlush(partida);
+        Long jugadorId = jugador.getId();
+
+        // Get all the partidaList where jugador equals to jugadorId
+        defaultPartidaShouldBeFound("jugadorId.equals=" + jugadorId);
+
+        // Get all the partidaList where jugador equals to (jugadorId + 1)
+        defaultPartidaShouldNotBeFound("jugadorId.equals=" + (jugadorId + 1));
     }
 
     /**

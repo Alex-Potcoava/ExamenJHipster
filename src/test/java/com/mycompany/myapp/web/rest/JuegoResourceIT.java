@@ -7,6 +7,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.mycompany.myapp.IntegrationTest;
 import com.mycompany.myapp.domain.Juego;
+import com.mycompany.myapp.domain.Jugador;
+import com.mycompany.myapp.domain.Partida;
 import com.mycompany.myapp.repository.JuegoRepository;
 import com.mycompany.myapp.service.criteria.JuegoCriteria;
 import java.util.List;
@@ -252,6 +254,58 @@ class JuegoResourceIT {
 
         // Get all the juegoList where nombre does not contain UPDATED_NOMBRE
         defaultJuegoShouldBeFound("nombre.doesNotContain=" + UPDATED_NOMBRE);
+    }
+
+    @Test
+    @Transactional
+    void getAllJuegosByJugadorIsEqualToSomething() throws Exception {
+        // Initialize the database
+        juegoRepository.saveAndFlush(juego);
+        Jugador jugador;
+        if (TestUtil.findAll(em, Jugador.class).isEmpty()) {
+            jugador = JugadorResourceIT.createEntity(em);
+            em.persist(jugador);
+            em.flush();
+        } else {
+            jugador = TestUtil.findAll(em, Jugador.class).get(0);
+        }
+        em.persist(jugador);
+        em.flush();
+        juego.addJugador(jugador);
+        juegoRepository.saveAndFlush(juego);
+        Long jugadorId = jugador.getId();
+
+        // Get all the juegoList where jugador equals to jugadorId
+        defaultJuegoShouldBeFound("jugadorId.equals=" + jugadorId);
+
+        // Get all the juegoList where jugador equals to (jugadorId + 1)
+        defaultJuegoShouldNotBeFound("jugadorId.equals=" + (jugadorId + 1));
+    }
+
+    @Test
+    @Transactional
+    void getAllJuegosByPartidaIsEqualToSomething() throws Exception {
+        // Initialize the database
+        juegoRepository.saveAndFlush(juego);
+        Partida partida;
+        if (TestUtil.findAll(em, Partida.class).isEmpty()) {
+            partida = PartidaResourceIT.createEntity(em);
+            em.persist(partida);
+            em.flush();
+        } else {
+            partida = TestUtil.findAll(em, Partida.class).get(0);
+        }
+        em.persist(partida);
+        em.flush();
+        juego.addPartida(partida);
+        juegoRepository.saveAndFlush(juego);
+        Long partidaId = partida.getId();
+
+        // Get all the juegoList where partida equals to partidaId
+        defaultJuegoShouldBeFound("partidaId.equals=" + partidaId);
+
+        // Get all the juegoList where partida equals to (partidaId + 1)
+        defaultJuegoShouldNotBeFound("partidaId.equals=" + (partidaId + 1));
     }
 
     /**

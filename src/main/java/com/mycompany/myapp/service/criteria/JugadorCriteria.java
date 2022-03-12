@@ -37,6 +37,10 @@ public class JugadorCriteria implements Serializable, Criteria {
 
     private LocalDateFilter fechaDeNacimiento;
 
+    private LongFilter juegoId;
+
+    private LongFilter partidaId;
+
     private Boolean distinct;
 
     public JugadorCriteria() {}
@@ -47,6 +51,8 @@ public class JugadorCriteria implements Serializable, Criteria {
         this.nombre = other.nombre == null ? null : other.nombre.copy();
         this.apellido = other.apellido == null ? null : other.apellido.copy();
         this.fechaDeNacimiento = other.fechaDeNacimiento == null ? null : other.fechaDeNacimiento.copy();
+        this.juegoId = other.juegoId == null ? null : other.juegoId.copy();
+        this.partidaId = other.partidaId == null ? null : other.partidaId.copy();
         this.distinct = other.distinct;
     }
 
@@ -130,6 +136,36 @@ public class JugadorCriteria implements Serializable, Criteria {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
+    public LongFilter getJuegoId() {
+        return juegoId;
+    }
+
+    public LongFilter juegoId() {
+        if (juegoId == null) {
+            juegoId = new LongFilter();
+        }
+        return juegoId;
+    }
+
+    public void setJuegoId(LongFilter juegoId) {
+        this.juegoId = juegoId;
+    }
+
+    public LongFilter getPartidaId() {
+        return partidaId;
+    }
+
+    public LongFilter partidaId() {
+        if (partidaId == null) {
+            partidaId = new LongFilter();
+        }
+        return partidaId;
+    }
+
+    public void setPartidaId(LongFilter partidaId) {
+        this.partidaId = partidaId;
+    }
+
     public Boolean getDistinct() {
         return distinct;
     }
@@ -153,13 +189,15 @@ public class JugadorCriteria implements Serializable, Criteria {
             Objects.equals(nombre, that.nombre) &&
             Objects.equals(apellido, that.apellido) &&
             Objects.equals(fechaDeNacimiento, that.fechaDeNacimiento) &&
+            Objects.equals(juegoId, that.juegoId) &&
+            Objects.equals(partidaId, that.partidaId) &&
             Objects.equals(distinct, that.distinct)
         );
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, apodo, nombre, apellido, fechaDeNacimiento, distinct);
+        return Objects.hash(id, apodo, nombre, apellido, fechaDeNacimiento, juegoId, partidaId, distinct);
     }
 
     // prettier-ignore
@@ -171,6 +209,8 @@ public class JugadorCriteria implements Serializable, Criteria {
             (nombre != null ? "nombre=" + nombre + ", " : "") +
             (apellido != null ? "apellido=" + apellido + ", " : "") +
             (fechaDeNacimiento != null ? "fechaDeNacimiento=" + fechaDeNacimiento + ", " : "") +
+            (juegoId != null ? "juegoId=" + juegoId + ", " : "") +
+            (partidaId != null ? "partidaId=" + partidaId + ", " : "") +
             (distinct != null ? "distinct=" + distinct + ", " : "") +
             "}";
     }

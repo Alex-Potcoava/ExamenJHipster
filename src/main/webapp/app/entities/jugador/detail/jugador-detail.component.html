@@ -30,6 +30,20 @@
         <dd>
           <span>{{ jugador.fechaDeNacimiento | formatMediumDate }}</span>
         </dd>
+        <dt><span>Juego</span></dt>
+        <dd>
+          <span *ngFor="let juego of jugador.juegos; let last = last">
+            <a [routerLink]="['/juego', juego?.id, 'view']">{{ juego.nombre }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Partida</span></dt>
+        <dd>
+          <span *ngFor="let partida of jugador.partidas; let last = last">
+            <a [routerLink]="['/partida', partida?.id, 'view']">{{ partida.ganador }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
