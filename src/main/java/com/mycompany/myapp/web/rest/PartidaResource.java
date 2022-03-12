@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -199,5 +200,21 @@ public class PartidaResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/ganadoresDeJuego")
+    public ResponseEntity<List<Partida>> findByJuego_NombreOrderByGanadorAsc(String nombre) {
+        if (nombre != null) {
+            return ResponseEntity.ok((partidaQueryService.findByJuego_NombreOrderByGanadorAsc(nombre)));
+        }
+        return new ResponseEntity("El nombre no es correcto", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/partidasGanadas")
+    ResponseEntity<List<Partida>> findByJuego_Jugadors_ApodoOrderByGanadorAsc(String apodo) {
+        if (apodo != null) {
+            return ResponseEntity.ok((partidaQueryService.findByJuego_Jugadors_ApodoOrderByGanadorAsc(apodo)));
+        }
+        return new ResponseEntity("El apodo no es correcto", HttpStatus.BAD_REQUEST);
     }
 }

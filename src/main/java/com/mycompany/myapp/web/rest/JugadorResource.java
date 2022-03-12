@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -35,15 +36,14 @@ public class JugadorResource {
 
     private final Logger log = LoggerFactory.getLogger(JugadorResource.class);
 
+    JugadorRepository jugadorRepository;
+
     private static final String ENTITY_NAME = "jugador";
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
     private final JugadorService jugadorService;
-
-    private final JugadorRepository jugadorRepository;
-
     private final JugadorQueryService jugadorQueryService;
 
     public JugadorResource(JugadorService jugadorService, JugadorRepository jugadorRepository, JugadorQueryService jugadorQueryService) {
@@ -199,5 +199,13 @@ public class JugadorResource {
             .noContent()
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))
             .build();
+    }
+
+    @GetMapping("/jugador")
+    ResponseEntity<Long> countByPartidas_Ganador(String ganador) {
+        if (ganador != null) {
+            return ResponseEntity.ok((jugadorQueryService.countByPartidas_Ganador(ganador)));
+        }
+        return new ResponseEntity("El nombre del ganador no es correcto", HttpStatus.BAD_REQUEST);
     }
 }

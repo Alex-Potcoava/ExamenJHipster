@@ -29,6 +29,14 @@ public class PartidaQueryService extends QueryService<Partida> {
 
     private final PartidaRepository partidaRepository;
 
+    public List<Partida> findByJuego_Jugadors_ApodoOrderByGanadorAsc(String apodo) {
+        return partidaRepository.findByJuego_Jugadors_ApodoOrderByGanadorAsc(apodo);
+    }
+
+    public List<Partida> findByJuego_NombreOrderByGanadorAsc(String nombre) {
+        return partidaRepository.findByJuego_NombreOrderByGanadorAsc(nombre);
+    }
+
     public PartidaQueryService(PartidaRepository partidaRepository) {
         this.partidaRepository = partidaRepository;
     }

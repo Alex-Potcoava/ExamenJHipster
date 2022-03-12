@@ -29,6 +29,10 @@ public class JugadorQueryService extends QueryService<Jugador> {
 
     private final JugadorRepository jugadorRepository;
 
+    public Long countByPartidas_Ganador(String ganador) {
+        return jugadorRepository.countByPartidas_Ganador(ganador);
+    }
+
     public JugadorQueryService(JugadorRepository jugadorRepository) {
         this.jugadorRepository = jugadorRepository;
     }
