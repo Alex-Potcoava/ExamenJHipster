@@ -1,0 +1,33 @@
+{
+  "changelogDate": "20220312153517",
+  "dto": "no",
+  "fields": [
+    {
+      "fieldName": "apodo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique", "pattern"],
+      "fieldValidateRulesPattern": "^[A-Za-z0-9_]*$"
+    },
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "apellido",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fechaDeNacimiento",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Jugador",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}
